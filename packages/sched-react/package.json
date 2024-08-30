@@ -1,0 +1,25 @@
+{
+  "name": "@sched/sched-react",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "description": "Sched React library",
+  "dependencies": {
+    "@sched/sched-js": "file:../sched-js",
+    "@types/react": "18.0.33",
+    "@types/react-dom": "18.0.11",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.24.8",
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.3",
+    "@babel/preset-react": "^7.24.7"
+  },
+  "scripts": {
+    "build": "babel src --out-dir dist"
+  }
+}
