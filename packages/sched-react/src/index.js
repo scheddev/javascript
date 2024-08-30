@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Sched from "@sched/sched-js";
+import Sched from "@scheddev/sched-js";
 
 export function BookingFlow({ clientId, resourceId, resourceGroupId, apiUrl }) {
   useEffect(() => {
