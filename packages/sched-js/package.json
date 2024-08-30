@@ -1,5 +1,5 @@
 {
-  "name": "@sched/sched-js",
+  "name": "@scheddev/sched-js",
   "version": "0.0.1",
   "description": "Sched JS library",
   "dependencies": {
