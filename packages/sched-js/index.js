@@ -21,9 +21,14 @@ class BookingCalendarSDK {
     this.booking = null;
     this.accessToken = null;
     this.currentTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    this.apiUrl = "";
   }
 
-  async init(containerId, clientId, apiUrl, { resourceId, resourceGroupId }) {
+  async init(
+    containerId,
+    clientId,
+    { resourceId, resourceGroupId, environment = "production" }
+  ) {
     this.container = document.getElementById(containerId);
     if (!this.container) {
       throw new Error(`Container with id ${containerId} not found`);
@@ -40,7 +45,7 @@ class BookingCalendarSDK {
     }
 
     this.clientId = clientId;
-    this.apiUrl = apiUrl;
+    this.setApiUrl(environment);
     this.resourceId = resourceId || null;
     this.resourceGroupId = resourceGroupId || null;
 
@@ -48,6 +53,25 @@ class BookingCalendarSDK {
     await this.fetchAndSetAvailabilities();
     this.renderCalendar();
     this.renderSlots(true); // Render slots for today's date
+  }
+
+  setApiUrl(environment) {
+    switch (environment) {
+      case "production":
+        this.apiUrl = "https://api.sched.dev/v1";
+        break;
+      case "staging":
+        this.apiUrl = "https://staging-api.sched.dev/v1";
+        break;
+      case "dev":
+        this.apiUrl = "https://staging-api.sched.dev/v1";
+        break;
+      case "local":
+        this.apiUrl = "http://localhost:8080/v1";
+        break;
+      default:
+        throw new Error("Invalid environment specified");
+    }
   }
 
   async obtainAccessToken() {
