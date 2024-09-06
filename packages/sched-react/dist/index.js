@@ -14,19 +14,21 @@ function BookingFlow(_ref) {
   var clientId = _ref.clientId,
     resourceId = _ref.resourceId,
     resourceGroupId = _ref.resourceGroupId,
-    apiUrl = _ref.apiUrl;
+    _ref$environment = _ref.environment,
+    environment = _ref$environment === void 0 ? "production" : _ref$environment;
   (0, _react.useEffect)(function () {
     var sched = new _schedJs["default"]();
     window.instance = sched;
-    if (!clientId || !resourceId && !resourceGroupId || !apiUrl) {
-      console.error("Missing clientId, apiUrl or resourceId/resourceGroupId");
+    if (!clientId || !resourceId && !resourceGroupId) {
+      console.error("Missing clientId or resourceId/resourceGroupId");
       return;
     }
-    sched.init("sc-calendar-container", clientId, apiUrl, {
+    sched.init("sc-calendar-container", clientId, {
       resourceId: resourceId,
-      resourceGroupId: resourceGroupId
+      resourceGroupId: resourceGroupId,
+      environment: environment
     });
-  }, [clientId, resourceId, apiUrl]);
+  }, [clientId, resourceId, resourceGroupId, environment]);
   return /*#__PURE__*/_react["default"].createElement("div", {
     id: "sc-calendar-container"
   });
