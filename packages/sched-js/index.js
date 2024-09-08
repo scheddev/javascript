@@ -484,6 +484,9 @@ const renderBookingConfirmation = (container, booking, currentTz) => {
               )}
               - ${format(utcToZonedTime(endDate, currentTz), "h:mm a")}
             </p>
+            <p class="${styles.appointmentTimezone}">
+              <strong>Timezone:</strong> ${currentTz}
+            </p>
           </div>
         </div>
         <div class="${styles.confirmationFooter}" style="margin-top: 30px;">
