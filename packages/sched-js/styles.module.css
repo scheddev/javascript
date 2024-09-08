@@ -420,3 +420,7 @@
     transform: translateY(0);
   }
 }
+
+.timezonePicker {
+  padding: 16px;
+}

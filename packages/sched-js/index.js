@@ -231,12 +231,39 @@ class BookingCalendarSDK {
   }
 
   renderCalendar() {
-    renderCalendarLayout(this.container, this.selectedDate);
+    renderCalendarLayout(this.container, this.selectedDate, this.currentTz);
     initializeCalendar(
       this.handleDateClick.bind(this),
       this.availabilities,
       this.selectedDate
     );
+    this.renderTimezonePicker();
+  }
+
+  renderTimezonePicker() {
+    const timezonePickerContainer = document.getElementById("timezonePicker");
+    if (timezonePickerContainer) {
+      render(
+        html`
+          <select @change=${this.handleTimezoneChange.bind(this)}>
+            ${Intl.supportedValuesOf("timeZone").map(
+              (tz) => html`
+                <option value=${tz} ?selected=${tz === this.currentTz}>
+                  ${tz} (${format(utcToZonedTime(new Date(), tz), "h:mm a")})
+                </option>
+              `
+            )}
+          </select>
+        `,
+        timezonePickerContainer
+      );
+    }
+  }
+
+  handleTimezoneChange(event) {
+    this.currentTz = event.target.value;
+    this.renderSlots(true);
+    this.renderCalendar();
   }
 
   renderSlots(isDateChange = false) {
@@ -316,7 +343,7 @@ class BookingCalendarSDK {
   }
 }
 
-const renderCalendarLayout = (container, selectedDate) => {
+const renderCalendarLayout = (container, selectedDate, currentTz) => {
   const formattedDate = selectedDate
     ? format(new Date(selectedDate), "EEEE, MMMM do")
     : "Select a Date";
@@ -327,7 +354,10 @@ const renderCalendarLayout = (container, selectedDate) => {
         <div class="${styles.slotsContainer}" id="slotsContainer">
           <h3>Available Slots on ${formattedDate}</h3>
         </div>
-        <div class="${styles.calendar}" id="calendar"></div>
+        <div>
+          <div class="${styles.calendar}" id="calendar"></div>
+          <div class="${styles.timezonePicker}" id="timezonePicker"></div>
+        </div>
       </div>
     `,
     container
