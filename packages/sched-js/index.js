@@ -453,7 +453,7 @@ const renderBookingConfirmation = (container, booking, currentTz) => {
             src="${booking.resource.pic}"
             alt="${booking.resource.name}"
             class="${styles.resourceImage}"
-            style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;"
+            style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto;"
           />
           <h3
             class="${styles.resourceName}"
