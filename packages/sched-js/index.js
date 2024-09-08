@@ -148,8 +148,8 @@ class BookingCalendarSDK {
 
     data = {
       ...data,
-      start: startTime,
-      end: endTime,
+      start: this.selectedSlot.originalStartTime, // Use original start time
+      end: this.selectedSlot.originalEndTime, // Use original end time
     };
 
     const resourceId = this.selectedSlot.resource.id;
@@ -281,6 +281,8 @@ class BookingCalendarSDK {
           "h:mm a"
         ),
         resource: availability.resource,
+        originalStartTime: availability.start, // Store original start time
+        originalEndTime: availability.end, // Store original end time
         compoundKey: `${this.selectedDate}-${format(
           utcToZonedTime(new Date(availability.start), this.currentTz),
           "HH:mm"
