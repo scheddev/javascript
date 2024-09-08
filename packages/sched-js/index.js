@@ -421,45 +421,78 @@ const renderBookingConfirmation = (container, booking, currentTz) => {
 
   render(
     html`
-      <div class="${styles.bookingFormContainer}">
-        <div class="${styles.twoColumnLayout}">
-          <div class="${styles.bookingConfirmation}">
-            <h3 class="${styles.formTitle}">Booking Confirmed</h3>
-            <div class="${styles.confirmationDetails}">
-              <p class="${styles.confirmationSubtitle}">
-                You are scheduled with ${booking.resource.name}.
-              </p>
-              <div class="${styles.meetingDetails}">
-                <p class="${styles.meetingTime}">
-                  <strong>Date and Time:</strong> ${format(
-                    utcToZonedTime(startDate, currentTz),
-                    "p, EEEE, MMMM d, yyyy"
-                  )}
-                  - ${format(utcToZonedTime(endDate, currentTz), "p")}
-                </p>
-              </div>
-              <p class="${styles.confirmationEmail}">
-                A confirmation has been sent to your email address.
-              </p>
-            </div>
+      <div
+        class="${styles.bookingFormContainer} ${styles.fadeIn}"
+        style="text-align: center;"
+      >
+        <div
+          class="${styles.confirmationHeader}"
+          style="display: flex; align-items: center; justify-content: center;"
+        >
+          <svg
+            class="${styles.checkmarkIcon}"
+            viewBox="0 0 24 24"
+            style="width: 48px; height: 48px; fill: #4CAF50; animation: checkmark 0.6s ease-in-out;"
+          >
+            <path
+              d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"
+            />
+          </svg>
+          <h2
+            class="${styles.confirmationTitle}"
+            style="margin-left: 16px; font-size: 24px; color: #333;"
+          >
+            Booking Confirmed!
+          </h2>
+        </div>
+        <div
+          class="${styles.confirmationBody}"
+          style="margin-top: 20px; text-align: center;"
+        >
+          <img
+            src="${booking.resource.pic}"
+            alt="${booking.resource.name}"
+            class="${styles.resourceImage}"
+            style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;"
+          />
+          <h3
+            class="${styles.resourceName}"
+            style="font-size: 20px; margin-top: 10px; color: #333;"
+          >
+            ${booking.resource.name}
+          </h3>
+          <p
+            class="${styles.resourceDescription}"
+            style="font-size: 16px; color: #777;"
+          >
+            ${booking.resource.description}
+          </p>
+          <div
+            class="${styles.appointmentDetails}"
+            style="margin-top: 20px; font-size: 16px; color: #333;"
+          >
+            <p class="${styles.appointmentDate}">
+              <strong>Date:</strong> ${format(
+                utcToZonedTime(startDate, currentTz),
+                "EEEE, MMMM d, yyyy"
+              )}
+            </p>
+            <p class="${styles.appointmentTime}">
+              <strong>Time:</strong> ${format(
+                utcToZonedTime(startDate, currentTz),
+                "h:mm a"
+              )}
+              - ${format(utcToZonedTime(endDate, currentTz), "h:mm a")}
+            </p>
           </div>
-          <div class="${styles.bookingSummary}">
-            <div class="${styles.summaryHeader}">
-              <img
-                src="${booking.resource.pic}"
-                class="${styles.summaryPic}"
-                alt="Resource Icon"
-              />
-              <div class="${styles.summaryDetails}">
-                <p class="${styles.summaryResource}">
-                  ${booking.resource.name}
-                </p>
-                <p class="${styles.summaryDescription}">
-                  ${booking.resource.description}
-                </p>
-              </div>
-            </div>
-          </div>
+        </div>
+        <div class="${styles.confirmationFooter}" style="margin-top: 30px;">
+          <p
+            class="${styles.confirmationEmail}"
+            style="font-size: 14px; color: #666;"
+          >
+            A confirmation has been sent to your email address.
+          </p>
         </div>
       </div>
     `,
