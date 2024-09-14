@@ -354,7 +354,9 @@ const renderCalendarLayout = (container, selectedDate, currentTz) => {
     html`
       <div class="${styles.twoColumnLayout}">
         <div class="${styles.slotsContainer}" id="slotsContainer">
-          <h3>Available Slots on ${formattedDate}</h3>
+          <h3 class="${styles.slotsHeader}">
+            Available Slots on ${formattedDate}
+          </h3>
         </div>
         <div>
           <div class="${styles.calendar}" id="calendar"></div>

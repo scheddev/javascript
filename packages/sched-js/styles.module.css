@@ -43,6 +43,72 @@
 
 /* FullCalendar Overrides */
 
+/* Ensure the calendar's overall background is white */
+.calendar :global(.fc) {
+  background-color: #ffffff !important;
+  color: #2c3e50; /* Default text color */
+}
+
+/* Toolbar Title */
+.calendar :global(.fc-toolbar-title) {
+  font-size: 0.875rem;
+  color: #2c3e50 !important;
+  font-weight: 600;
+}
+
+/* Toolbar Buttons */
+.calendar :global(.fc-button) {
+  color: #2c3e50 !important;
+  background: none !important;
+  border: none !important;
+}
+
+.calendar :global(.fc-button:hover) {
+  background-color: #f0f0f0 !important;
+}
+
+/* Header Cells (Day Names) */
+.calendar :global(.fc-col-header-cell) {
+  background-color: #ffffff !important;
+  color: #2c3e50 !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+/* Day Numbers */
+.calendar :global(.fc-daygrid-day-number) {
+  color: #2c3e50 !important;
+}
+
+/* Day Cells */
+.calendar :global(.fc-daygrid-day) {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  cursor: pointer;
+}
+
+/* Today's Date Cell */
+.calendar :global(.fc-day-today) {
+  background-color: #ebf8ff !important;
+}
+
+/* Event Titles */
+.calendar :global(.fc-event-title) {
+  color: #2c3e50 !important;
+}
+
+/* Adjust cell hover background */
+.calendar :global(.fc-daygrid-day:hover) {
+  background-color: #f7fafc !important;
+  transition: background-color 0.2s ease;
+}
+
+/* Remove any dark mode overrides for the calendar */
+.calendar :global(.dark-mode) {
+  /* Neutralize dark mode styles */
+  background-color: transparent !important;
+  color: inherit !important;
+}
+
 .calendar :global(.fc-event) {
   pointer-events: none !important;
 }
@@ -432,4 +498,9 @@
   100% {
     stroke-dashoffset: 0;
   }
+}
+
+/* New Styles */
+.slotsHeader {
+  color: #333 !important; /* Ensures the color isn't overridden */
 }
