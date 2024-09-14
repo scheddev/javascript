@@ -293,7 +293,12 @@ class BookingCalendarSDK {
   }
 
   renderCalendar() {
-    renderCalendarLayout(this.container, this.selectedDate, this.currentTz);
+    renderCalendarLayout(
+      this.container,
+      this.selectedDate,
+      this.currentTz,
+      this.demoMode // Pass demoMode flag
+    );
     initializeCalendar(
       this.handleDateClick.bind(this),
       this.availabilities,
@@ -407,23 +412,41 @@ class BookingCalendarSDK {
   }
 }
 
-const renderCalendarLayout = (container, selectedDate, currentTz) => {
+const renderCalendarLayout = (
+  container,
+  selectedDate,
+  currentTz,
+  isDemoMode
+) => {
   const formattedDate = selectedDate
     ? format(new Date(selectedDate), "EEEE, MMMM do")
     : "Select a Date";
 
   render(
     html`
-      <div class="${styles.twoColumnLayout}">
-        <div class="${styles.slotsContainer}" id="slotsContainer">
-          <h3 class="${styles.slotsHeader}">
-            Available Slots on ${formattedDate}
-          </h3>
+      <div class="${styles.calendarContainer}">
+        <div class="${styles.twoColumnLayout}">
+          <div class="${styles.slotsContainer}" id="slotsContainer">
+            <h3 class="${styles.slotsHeader}">
+              Available Slots on ${formattedDate}
+            </h3>
+          </div>
+          <div>
+            <div class="${styles.calendar}" id="calendar"></div>
+            <div class="${styles.timezonePicker}" id="timezonePicker"></div>
+          </div>
         </div>
-        <div>
-          <div class="${styles.calendar}" id="calendar"></div>
-          <div class="${styles.timezonePicker}" id="timezonePicker"></div>
-        </div>
+        ${isDemoMode
+          ? html`
+              <div class="${styles.demoBadgeContainer}">
+                <div class="${styles.demoBadge}">Demo Mode</div>
+                <p class="${styles.demoText}">
+                  Don't worry, submitting this form will not create a real
+                  booking.
+                </p>
+              </div>
+            `
+          : ""}
       </div>
     `,
     container
