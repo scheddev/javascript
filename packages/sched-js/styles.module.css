@@ -71,7 +71,7 @@
 .calendar :global(.fc-col-header-cell) {
   background-color: #ffffff !important;
   color: #2c3e50 !important;
-  border: 1px solid #e2e8f0 !important;
+  border: 0px solid #e2e8f0 !important;
 }
 
 /* Day Numbers */
