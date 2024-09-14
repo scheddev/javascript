@@ -144,7 +144,8 @@ class BookingCalendarSDK {
       date.setDate(today.getDate() + i);
       const startTimes = [9, 11, 13, 15]; // Sample times
       startTimes.forEach((hour) => {
-        const start = new Date(date.setHours(hour, 0, 0));
+        const start = new Date(date);
+        start.setHours(hour, 0, 0, 0); // Set hours on a new date instance
         const end = new Date(start.getTime() + 60 * 60 * 1000); // 1 hour duration
         availabilities.push({
           start: start.toISOString(),
@@ -207,8 +208,8 @@ class BookingCalendarSDK {
     if (this.demoMode) {
       // Simulate booking confirmation
       this.booking = {
-        start: data.start,
-        end: data.end,
+        start: this.selectedSlot.originalStartTime,
+        end: this.selectedSlot.originalEndTime,
         resource: {
           id: resourceId,
           name: this.selectedSlot.resource.name,
@@ -505,8 +506,13 @@ const generateUniqueEvents = (availabilities) => {
 
 // Form-related functions
 const renderBookingConfirmation = (container, booking, currentTz) => {
-  const startDate = new Date(booking.start + "Z");
-  const endDate = new Date(booking.end + "Z");
+  // Parse the ISO string dates
+  const startDate = new Date(booking.start);
+  const endDate = new Date(booking.end);
+
+  // Convert to the selected timezone
+  const localStartDate = utcToZonedTime(startDate, currentTz);
+  const localEndDate = utcToZonedTime(endDate, currentTz);
 
   render(
     html`
@@ -562,6 +568,9 @@ const renderBookingConfirmation = (container, booking, currentTz) => {
           >
             <p class="${styles.appointmentDate}">
               <strong>Date:</strong> ${format(
+                localStartDate,
+                "EEEE, MMMM d, yyyy"
+              )} <strong>Date:</strong> ${format(
                 utcToZonedTime(startDate, currentTz),
                 "EEEE, MMMM d, yyyy"
               )}
