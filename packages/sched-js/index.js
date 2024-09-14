@@ -139,26 +139,57 @@ class BookingCalendarSDK {
   generateDemoAvailabilities() {
     const today = new Date();
     const availabilities = [];
+
+    // Provided profile pictures
+    const profilePics = [
+      "https://sched.dev/user-pics/1.jpg", // Man
+      "https://sched.dev/user-pics/2.jpg", // Man
+      "https://sched.dev/user-pics/3.jpg", // Woman
+      "https://sched.dev/user-pics/4.jpg", // Woman
+    ];
+
+    // Real-ish names corresponding to the profile pictures
+    const names = [
+      "John Doe",
+      "Michael Smith",
+      "Emily Johnson",
+      "Sarah Williams",
+    ];
+
+    // Sample descriptions for each resource
+    const descriptions = [
+      "Expert in project management.",
+      "Specialist in software development.",
+      "Professional consultant.",
+      "Experienced trainer and coach.",
+    ];
+
     for (let i = 0; i < 10; i++) {
-      const date = new Date();
+      const date = new Date(today);
       date.setDate(today.getDate() + i);
       const startTimes = [9, 11, 13, 15]; // Sample times
-      startTimes.forEach((hour) => {
+
+      startTimes.forEach((hour, hourIndex) => {
         const start = new Date(date);
-        start.setHours(hour, 0, 0, 0); // Set hours on a new date instance
+        start.setHours(hour, 0, 0, 0);
         const end = new Date(start.getTime() + 60 * 60 * 1000); // 1 hour duration
+
+        // Use hourIndex to ensure resourceIdx is an integer
+        const resourceIdx = (i + hourIndex) % profilePics.length;
+
         availabilities.push({
           start: start.toISOString(),
           end: end.toISOString(),
           resource: {
-            id: `demo-resource-${i}`,
-            name: `Demo Resource ${i + 1}`,
-            pic: "https://via.placeholder.com/80",
-            description: "This is a demo resource.",
+            id: `demo-resource-${resourceIdx}`,
+            name: names[resourceIdx],
+            pic: profilePics[resourceIdx],
+            description: descriptions[resourceIdx],
           },
         });
       });
     }
+
     return availabilities;
   }
 
