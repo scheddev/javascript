@@ -275,7 +275,12 @@ class BookingCalendarSDK {
 
   renderBookingConfirmation() {
     if (this.booking) {
-      renderBookingConfirmation(this.container, this.booking, this.currentTz);
+      renderBookingConfirmation(
+        this.container,
+        this.booking,
+        this.currentTz,
+        this.demoMode // Pass demoMode flag
+      );
     } else {
       console.error("Booking confirmation called without a valid booking");
     }
@@ -296,7 +301,8 @@ class BookingCalendarSDK {
       this.container,
       this.handleSubmit.bind(this),
       this.formStatus,
-      bookingDetails
+      bookingDetails,
+      this.demoMode // Pass demoMode flag
     );
 
     // Apply fade-in effect to the form
@@ -536,7 +542,12 @@ const generateUniqueEvents = (availabilities) => {
 };
 
 // Form-related functions
-const renderBookingConfirmation = (container, booking, currentTz) => {
+const renderBookingConfirmation = (
+  container,
+  booking,
+  currentTz,
+  isDemoMode // Accept demoMode flag
+) => {
   // Parse the ISO string dates
   const startDate = new Date(booking.start);
   const endDate = new Date(booking.end);
@@ -601,17 +612,11 @@ const renderBookingConfirmation = (container, booking, currentTz) => {
               <strong>Date:</strong> ${format(
                 localStartDate,
                 "EEEE, MMMM d, yyyy"
-              )} <strong>Date:</strong> ${format(
-                utcToZonedTime(startDate, currentTz),
-                "EEEE, MMMM d, yyyy"
               )}
             </p>
             <p class="${styles.appointmentTime}">
-              <strong>Time:</strong> ${format(
-                utcToZonedTime(startDate, currentTz),
-                "h:mm a"
-              )}
-              - ${format(utcToZonedTime(endDate, currentTz), "h:mm a")}
+              <strong>Time:</strong> ${format(localStartDate, "h:mm a")} -
+              ${format(localEndDate, "h:mm a")}
             </p>
             <p class="${styles.appointmentTimezone}">
               <strong>Timezone:</strong> ${currentTz}
@@ -626,6 +631,17 @@ const renderBookingConfirmation = (container, booking, currentTz) => {
             A confirmation has been sent to your email address.
           </p>
         </div>
+        ${isDemoMode
+          ? html`
+              <div class="${styles.demoBadgeContainer}">
+                <div class="${styles.demoBadge}">Demo Mode</div>
+                <p class="${styles.demoText}">
+                  Don't worry, submitting this form will not create a real
+                  booking.
+                </p>
+              </div>
+            `
+          : ""}
       </div>
     `,
     container
@@ -636,7 +652,8 @@ const renderBookingForm = (
   container,
   handleSubmit,
   formStatus,
-  bookingDetails
+  bookingDetails,
+  isDemoMode // Accept demoMode flag
 ) => {
   render(
     html`
@@ -694,6 +711,17 @@ const renderBookingForm = (
                   </div>`
                 : ""}
             </form>
+            ${isDemoMode
+              ? html`
+                  <div class="${styles.demoBadgeContainer}">
+                    <div class="${styles.demoBadge}">Demo Mode</div>
+                    <p class="${styles.demoText}">
+                      Don't worry, submitting this form will not create a real
+                      booking.
+                    </p>
+                  </div>
+                `
+              : ""}
           </div>
           <div class="${styles.bookingSummary}">
             <div class="${styles.summaryHeader}">
@@ -715,6 +743,17 @@ const renderBookingForm = (
             </div>
           </div>
         </div>
+        ${isDemoMode
+          ? html`
+              <div class="${styles.demoBadgeContainer}">
+                <div class="${styles.demoBadge}">Demo Mode</div>
+                <p class="${styles.demoText}">
+                  Don't worry, submitting this form will not create a real
+                  booking.
+                </p>
+              </div>
+            `
+          : ""}
       </div>
     `,
     container
