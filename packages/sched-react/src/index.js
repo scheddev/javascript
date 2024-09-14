@@ -6,6 +6,7 @@ export function BookingFlow({
   resourceId,
   resourceGroupId,
   environment = "production",
+  demoMode = false,
 }) {
   useEffect(() => {
     const sched = new Sched();
@@ -18,7 +19,8 @@ export function BookingFlow({
       resourceId,
       resourceGroupId,
       environment,
+      demoMode,
     });
-  }, [clientId, resourceId, resourceGroupId, environment]);
+  }, [clientId, resourceId, resourceGroupId, environment, demoMode]);
   return <div id="sc-calendar-container"></div>;
 }

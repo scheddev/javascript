@@ -7,7 +7,7 @@
   ],
   "description": "Sched React library",
   "dependencies": {
-    "@scheddev/sched-js": "0.0.4",
+    "@scheddev/sched-js": "../sched-js",
     "@types/react": "18.0.33",
     "@types/react-dom": "18.0.11",
     "react": "18.2.0",

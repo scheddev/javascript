@@ -22,12 +22,18 @@ class BookingCalendarSDK {
     this.accessToken = null;
     this.currentTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
     this.apiUrl = "";
+    this.demoMode = false; // Add demoMode property
   }
 
   async init(
     containerId,
     clientId,
-    { resourceId, resourceGroupId, environment = "production" }
+    {
+      resourceId,
+      resourceGroupId,
+      environment = "production",
+      demoMode = false, // Accept demoMode in options
+    }
   ) {
     this.container = document.getElementById(containerId);
     if (!this.container) {
@@ -48,6 +54,7 @@ class BookingCalendarSDK {
     this.setApiUrl(environment);
     this.resourceId = resourceId || null;
     this.resourceGroupId = resourceGroupId || null;
+    this.demoMode = demoMode; // Set demoMode
 
     await this.obtainAccessToken();
     await this.fetchAndSetAvailabilities();
@@ -75,6 +82,11 @@ class BookingCalendarSDK {
   }
 
   async obtainAccessToken() {
+    if (this.demoMode) {
+      this.accessToken = "demo-access-token"; // Set dummy token
+      return;
+    }
+
     const response = await fetch(`${this.apiUrl}/auth/token`, {
       method: "POST",
       headers: {
@@ -95,6 +107,13 @@ class BookingCalendarSDK {
   }
 
   async fetchAndSetAvailabilities() {
+    if (this.demoMode) {
+      // Generate dummy availabilities
+      this.availabilities = this.generateDemoAvailabilities();
+      this.validDays = updateValidDays(this.availabilities);
+      return;
+    }
+
     const start = new Date().toISOString();
     const end = new Date(
       new Date().setMonth(new Date().getMonth() + 1)
@@ -115,6 +134,31 @@ class BookingCalendarSDK {
     } catch (error) {
       console.error("Error fetching availabilities:", error);
     }
+  }
+
+  generateDemoAvailabilities() {
+    const today = new Date();
+    const availabilities = [];
+    for (let i = 0; i < 10; i++) {
+      const date = new Date();
+      date.setDate(today.getDate() + i);
+      const startTimes = [9, 11, 13, 15]; // Sample times
+      startTimes.forEach((hour) => {
+        const start = new Date(date.setHours(hour, 0, 0));
+        const end = new Date(start.getTime() + 60 * 60 * 1000); // 1 hour duration
+        availabilities.push({
+          start: start.toISOString(),
+          end: end.toISOString(),
+          resource: {
+            id: `demo-resource-${i}`,
+            name: `Demo Resource ${i + 1}`,
+            pic: "https://via.placeholder.com/80",
+            description: "This is a demo resource.",
+          },
+        });
+      });
+    }
+    return availabilities;
   }
 
   handleDateClick(event) {
@@ -160,12 +204,30 @@ class BookingCalendarSDK {
       return;
     }
 
+    if (this.demoMode) {
+      // Simulate booking confirmation
+      this.booking = {
+        start: data.start,
+        end: data.end,
+        resource: {
+          id: resourceId,
+          name: this.selectedSlot.resource.name,
+          pic: this.selectedSlot.resource.pic,
+          description: this.selectedSlot.resource.description,
+        },
+      };
+      this.formStatus = "success";
+      this.renderBookingConfirmation();
+      return;
+    }
+
     try {
       this.booking = await bookAppointment(
         this.accessToken,
         data,
         this.apiUrl,
-        resourceId
+        resourceId,
+        this.demoMode // Pass demoMode flag
       );
       this.formStatus = "success";
       this.renderBookingConfirmation();

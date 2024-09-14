@@ -15,7 +15,9 @@ function BookingFlow(_ref) {
     resourceId = _ref.resourceId,
     resourceGroupId = _ref.resourceGroupId,
     _ref$environment = _ref.environment,
-    environment = _ref$environment === void 0 ? "production" : _ref$environment;
+    environment = _ref$environment === void 0 ? "production" : _ref$environment,
+    _ref$demoMode = _ref.demoMode,
+    demoMode = _ref$demoMode === void 0 ? false : _ref$demoMode;
   (0, _react.useEffect)(function () {
     var sched = new _schedJs["default"]();
     window.instance = sched;
@@ -26,9 +28,10 @@ function BookingFlow(_ref) {
     sched.init("sc-calendar-container", clientId, {
       resourceId: resourceId,
       resourceGroupId: resourceGroupId,
-      environment: environment
+      environment: environment,
+      demoMode: demoMode
     });
-  }, [clientId, resourceId, resourceGroupId, environment]);
+  }, [clientId, resourceId, resourceGroupId, environment, demoMode]);
   return /*#__PURE__*/_react["default"].createElement("div", {
     id: "sc-calendar-container"
   });
