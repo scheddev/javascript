@@ -1,6 +1,6 @@
 {
   "name": "@scheddev/sched-js",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Sched JS library",
   "dependencies": {
     "@fullcalendar/core": "^6.1.13",
