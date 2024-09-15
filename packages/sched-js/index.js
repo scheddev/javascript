@@ -477,11 +477,10 @@ const renderCalendarLayout = (
         ${isDemoMode
           ? html`
               <div class="${styles.demoBadgeContainer}">
-                <div class="${styles.demoBadge}">Demo Mode</div>
-                <p class="${styles.demoText}">
-                  Don't worry, submitting this form will not create a real
-                  booking.
-                </p>
+                <div class="${styles.demoBadge}">
+                  Demo Mode – Don't worry, submitting this form will not create
+                  a real booking.
+                </div>
               </div>
             `
           : ""}
@@ -634,11 +633,10 @@ const renderBookingConfirmation = (
         ${isDemoMode
           ? html`
               <div class="${styles.demoBadgeContainer}">
-                <div class="${styles.demoBadge}">Demo Mode</div>
-                <p class="${styles.demoText}">
-                  Don't worry, submitting this form will not create a real
-                  booking.
-                </p>
+                <div class="${styles.demoBadge}">
+                  Demo Mode – Don't worry, submitting this form will not create
+                  a real booking.
+                </div>
               </div>
             `
           : ""}
@@ -735,11 +733,10 @@ const renderBookingForm = (
         ${isDemoMode
           ? html`
               <div class="${styles.demoBadgeContainer}">
-                <div class="${styles.demoBadge}">Demo Mode</div>
-                <p class="${styles.demoText}">
-                  Don't worry, submitting this form will not create a real
-                  booking.
-                </p>
+                <div class="${styles.demoBadge}">
+                  Demo Mode – Don't worry, submitting this form will not create
+                  a real booking.
+                </div>
               </div>
             `
           : ""}
