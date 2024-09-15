@@ -463,6 +463,16 @@ const renderCalendarLayout = (
   render(
     html`
       <div class="${styles.calendarContainer}">
+        ${isDemoMode
+          ? html`
+              <div class="${styles.demoBadgeContainer}">
+                <div class="${styles.demoBadge}">
+                  Demo Mode – Don't worry, submitting this form will not create
+                  a real booking.
+                </div>
+              </div>
+            `
+          : ""}
         <div class="${styles.twoColumnLayout}">
           <div class="${styles.slotsContainer}" id="slotsContainer">
             <h3 class="${styles.slotsHeader}">
@@ -474,16 +484,6 @@ const renderCalendarLayout = (
             <div class="${styles.timezonePicker}" id="timezonePicker"></div>
           </div>
         </div>
-        ${isDemoMode
-          ? html`
-              <div class="${styles.demoBadgeContainer}">
-                <div class="${styles.demoBadge}">
-                  Demo Mode – Don't worry, submitting this form will not create
-                  a real booking.
-                </div>
-              </div>
-            `
-          : ""}
       </div>
     `,
     container
@@ -561,6 +561,16 @@ const renderBookingConfirmation = (
         class="${styles.bookingFormContainer} ${styles.fadeIn}"
         style="text-align: center;"
       >
+        ${isDemoMode
+          ? html`
+              <div class="${styles.demoBadgeContainer}">
+                <div class="${styles.demoBadge}">
+                  Demo Mode – Don't worry, submitting this form will not create
+                  a real booking.
+                </div>
+              </div>
+            `
+          : ""}
         <div
           class="${styles.confirmationHeader}"
           style="display: flex; align-items: center; justify-content: center;"
@@ -630,16 +640,6 @@ const renderBookingConfirmation = (
             A confirmation has been sent to your email address.
           </p>
         </div>
-        ${isDemoMode
-          ? html`
-              <div class="${styles.demoBadgeContainer}">
-                <div class="${styles.demoBadge}">
-                  Demo Mode – Don't worry, submitting this form will not create
-                  a real booking.
-                </div>
-              </div>
-            `
-          : ""}
       </div>
     `,
     container
@@ -656,6 +656,16 @@ const renderBookingForm = (
   render(
     html`
       <div class="${styles.bookingFormContainer}">
+        ${isDemoMode
+          ? html`
+              <div class="${styles.demoBadgeContainer}">
+                <div class="${styles.demoBadge}">
+                  Demo Mode – Don't worry, submitting this form will not create
+                  a real booking.
+                </div>
+              </div>
+            `
+          : ""}
         <div class="${styles.twoColumnLayout}">
           <div class="${styles.bookingForm}">
             <h3 class="${styles.formTitle}">Enter Details</h3>
@@ -730,16 +740,6 @@ const renderBookingForm = (
             </div>
           </div>
         </div>
-        ${isDemoMode
-          ? html`
-              <div class="${styles.demoBadgeContainer}">
-                <div class="${styles.demoBadge}">
-                  Demo Mode – Don't worry, submitting this form will not create
-                  a real booking.
-                </div>
-              </div>
-            `
-          : ""}
       </div>
     `,
     container
