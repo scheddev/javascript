@@ -711,17 +711,6 @@ const renderBookingForm = (
                   </div>`
                 : ""}
             </form>
-            ${isDemoMode
-              ? html`
-                  <div class="${styles.demoBadgeContainer}">
-                    <div class="${styles.demoBadge}">Demo Mode</div>
-                    <p class="${styles.demoText}">
-                      Don't worry, submitting this form will not create a real
-                      booking.
-                    </p>
-                  </div>
-                `
-              : ""}
           </div>
           <div class="${styles.bookingSummary}">
             <div class="${styles.summaryHeader}">
