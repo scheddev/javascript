@@ -181,10 +181,10 @@ class BookingCalendarSDK {
   renderCalendar() {
     render(
       html`
-        <div class="${styles.calendarContainer}">
+        <div class="${styles.calendarContainer} ${styles.fadeIn}">
           ${this.demoMode
             ? html`
-                <div class="${styles.demoBadgeContainer}">
+                <div class="${styles.demoBadgeContainer} ${styles.slideDown}">
                   <div class="${styles.demoBadge}">
                     Demo Mode – Don't worry, submitting this form will not
                     create a real booking.
@@ -194,8 +194,10 @@ class BookingCalendarSDK {
             : ""}
           <div class="${styles.calendarScreen}">
             ${this.renderDateSlider()}
-            <div class="${styles.slotsContainer}" id="slotsContainer">
-              <!-- Include the slots template here -->
+            <div
+              class="${styles.slotsContainer} ${styles.fadeIn}"
+              id="slotsContainer"
+            >
               ${this.renderSlotsTemplate()}
             </div>
           </div>
@@ -242,7 +244,11 @@ class BookingCalendarSDK {
       <ul class="${styles.slotsList}">
         ${this.slots.map(
           (slot, index) => html`
-            <li key=${index} class="${styles.slotItem}">
+            <li
+              key=${index}
+              class="${styles.slotItem} ${styles.fadeInUp}"
+              style="animation-delay: ${index * 0.1}s"
+            >
               <div class="${styles.slotResource}">
                 <div class="${styles.slotResourceInfo}">
                   <img
@@ -558,7 +564,10 @@ const renderBookingConfirmation = (
 
   render(
     html`
-      <div class="${styles.bookingFormContainer}" style="text-align: center;">
+      <div
+        class="${styles.bookingFormContainer} ${styles.fadeIn}"
+        style="text-align: center;"
+      >
         ${isDemoMode
           ? html`
               <div class="${styles.demoBadgeContainer}">
@@ -570,7 +579,7 @@ const renderBookingConfirmation = (
             `
           : ""}
         <div
-          class="${styles.confirmationHeader}"
+          class="${styles.confirmationHeader} ${styles.scaleIn}"
           style="display: flex; align-items: center; justify-content: center;"
         >
           <svg
@@ -590,7 +599,7 @@ const renderBookingConfirmation = (
           </h2>
         </div>
         <div
-          class="${styles.confirmationBody}"
+          class="${styles.confirmationBody} ${styles.fadeInUp}"
           style="margin-top: 20px; text-align: center;"
         >
           <img
@@ -653,7 +662,7 @@ const renderBookingForm = (
 ) => {
   render(
     html`
-      <div class="${styles.bookingFormContainer}">
+      <div class="${styles.bookingFormContainer} ${styles.fadeIn}">
         ${isDemoMode
           ? html`
               <div class="${styles.demoBadgeContainer}">
@@ -665,7 +674,7 @@ const renderBookingForm = (
             `
           : ""}
         <!-- Move the booking summary above the form -->
-        <div class="${styles.bookingSummary}">
+        <div class="${styles.bookingSummary} ${styles.slideInRight}">
           <div class="${styles.summaryHeader}">
             <img
               src="${bookingDetails.resourcePic}"
@@ -686,7 +695,7 @@ const renderBookingForm = (
         </div>
 
         <!-- Update the form container -->
-        <div class="${styles.bookingForm}">
+        <div class="${styles.bookingForm} ${styles.slideInLeft}">
           <h3 class="${styles.formTitle}">Enter Details</h3>
           <form id="bookingForm" @submit=${handleSubmit}>
             <fieldset class="${styles.formFieldset}">

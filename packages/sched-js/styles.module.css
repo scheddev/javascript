@@ -340,11 +340,12 @@
 
 .slotItem {
   width: 100%;
+  opacity: 0;
+  transform: translateY(20px);
 }
 
-.slotItem.fadeIn {
-  opacity: 1;
-  transform: translateY(0);
+.slotItem.fadeInUp {
+  animation: fadeInUp 0.5s ease-out forwards;
 }
 
 .slotButtons {
@@ -718,4 +719,87 @@
 .selectedDateButton .dateButtonDay,
 .selectedDateButton .dateButtonDate {
   color: #fff;
+}
+
+/* New Animations */
+.fadeIn {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.fadeInUp {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.slideDown {
+  animation: slideDown 0.5s ease-out;
+}
+
+.slideInRight {
+  animation: slideInRight 0.5s ease-out;
+}
+
+.slideInLeft {
+  animation: slideInLeft 0.5s ease-out;
+}
+
+.scaleIn {
+  animation: scaleIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
