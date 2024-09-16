@@ -1,6 +1,3 @@
-import { Calendar } from "@fullcalendar/core";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin from "@fullcalendar/interaction";
 import { format, parse } from "date-fns";
 import { zonedTimeToUtc, utcToZonedTime } from "date-fns-tz";
 import { html, render } from "lit-html";
@@ -11,8 +8,7 @@ import { updateValidDays } from "./utils";
 class BookingCalendarSDK {
   constructor() {
     this.container = null;
-    this.validDays = [];
-    this.selectedDate = format(new Date(), "yyyy-MM-dd"); // Pre-select today's date
+    this.selectedDate = format(new Date(), "yyyy-MM-dd"); // Default to today
     this.selectedSlot = null;
     this.slots = [];
     this.availabilities = [];
@@ -22,7 +18,7 @@ class BookingCalendarSDK {
     this.accessToken = null;
     this.currentTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
     this.apiUrl = "";
-    this.demoMode = false; // Add demoMode property
+    this.demoMode = false;
   }
 
   async init(
@@ -32,7 +28,7 @@ class BookingCalendarSDK {
       resourceId,
       resourceGroupId,
       environment = "production",
-      demoMode = false, // Accept demoMode in options
+      demoMode = false,
     }
   ) {
     this.container = document.getElementById(containerId);
@@ -54,12 +50,11 @@ class BookingCalendarSDK {
     this.setApiUrl(environment);
     this.resourceId = resourceId || null;
     this.resourceGroupId = resourceGroupId || null;
-    this.demoMode = demoMode; // Set demoMode
+    this.demoMode = demoMode;
 
     await this.obtainAccessToken();
     await this.fetchAndSetAvailabilities();
     this.renderCalendar();
-    this.renderSlots(true); // Render slots for today's date
   }
 
   setApiUrl(environment) {
@@ -83,7 +78,7 @@ class BookingCalendarSDK {
 
   async obtainAccessToken() {
     if (this.demoMode) {
-      this.accessToken = "demo-access-token"; // Set dummy token
+      this.accessToken = "demo-access-token";
       return;
     }
 
@@ -108,16 +103,14 @@ class BookingCalendarSDK {
 
   async fetchAndSetAvailabilities() {
     if (this.demoMode) {
-      // Generate dummy availabilities
-      this.availabilities = this.generateDemoAvailabilities();
-      this.validDays = updateValidDays(this.availabilities);
+      this.availabilities = this.generateDemoAvailabilities(this.selectedDate);
+      console.log("Availabilities in demo mode:", this.availabilities);
       return;
     }
 
-    const start = new Date().toISOString();
-    const end = new Date(
-      new Date().setMonth(new Date().getMonth() + 1)
-    ).toISOString();
+    const start = new Date(this.selectedDate);
+    const end = new Date(this.selectedDate);
+    end.setDate(end.getDate() + 1);
 
     try {
       const availabilities = await fetchAvailabilities(
@@ -125,22 +118,21 @@ class BookingCalendarSDK {
         this.accessToken,
         this.resourceId,
         this.resourceGroupId,
-        start,
-        end
+        start.toISOString(),
+        end.toISOString()
       );
 
       this.availabilities = availabilities;
-      this.validDays = updateValidDays(this.availabilities);
+      console.log("Fetched availabilities:", this.availabilities);
     } catch (error) {
       console.error("Error fetching availabilities:", error);
     }
   }
 
-  generateDemoAvailabilities() {
-    const today = new Date();
+  generateDemoAvailabilities(selectedDate) {
+    const date = new Date(selectedDate || new Date());
     const availabilities = [];
 
-    // Provided profile pictures
     const profilePics = [
       "https://sched.dev/user-pics/1.jpg", // Man
       "https://sched.dev/user-pics/2.jpg", // Man
@@ -148,7 +140,6 @@ class BookingCalendarSDK {
       "https://sched.dev/user-pics/4.jpg", // Woman
     ];
 
-    // Real-ish names corresponding to the profile pictures
     const names = [
       "John Doe",
       "Michael Smith",
@@ -156,7 +147,6 @@ class BookingCalendarSDK {
       "Sarah Williams",
     ];
 
-    // Sample descriptions for each resource
     const descriptions = [
       "Expert in project management.",
       "Specialist in software development.",
@@ -164,44 +154,243 @@ class BookingCalendarSDK {
       "Experienced trainer and coach.",
     ];
 
-    for (let i = 0; i < 10; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
-      const startTimes = [9, 11, 13, 15]; // Sample times
+    const startTimes = [9, 11, 13, 15]; // Sample times
 
-      startTimes.forEach((hour, hourIndex) => {
-        const start = new Date(date);
-        start.setHours(hour, 0, 0, 0);
-        const end = new Date(start.getTime() + 60 * 60 * 1000); // 1 hour duration
+    startTimes.forEach((hour, hourIndex) => {
+      const start = new Date(date);
+      start.setHours(hour, 0, 0, 0);
+      const end = new Date(start.getTime() + 60 * 60 * 1000); // 1 hour duration
 
-        // Use hourIndex to ensure resourceIdx is an integer
-        const resourceIdx = (i + hourIndex) % profilePics.length;
+      const resourceIdx = hourIndex % profilePics.length;
 
-        availabilities.push({
-          start: start.toISOString(),
-          end: end.toISOString(),
-          resource: {
-            id: `demo-resource-${resourceIdx}`,
-            name: names[resourceIdx],
-            pic: profilePics[resourceIdx],
-            description: descriptions[resourceIdx],
-          },
-        });
+      availabilities.push({
+        start: start.toISOString(),
+        end: end.toISOString(),
+        resource: {
+          id: `demo-resource-${resourceIdx}`,
+          name: names[resourceIdx],
+          pic: profilePics[resourceIdx],
+          description: descriptions[resourceIdx],
+        },
       });
-    }
+    });
 
     return availabilities;
   }
 
-  handleDateClick(event) {
-    const date = event.dateStr;
-    if (this.validDays.includes(date)) {
-      this.selectedDate = date;
-      this.fetchAndSetAvailabilities().then(() => {
-        this.renderSlots(true); // Pass true to indicate date change
-        this.renderCalendar();
+  renderCalendar() {
+    render(
+      html`
+        <div class="${styles.calendarContainer}">
+          ${this.demoMode
+            ? html`
+                <div class="${styles.demoBadgeContainer}">
+                  <div class="${styles.demoBadge}">
+                    Demo Mode – Don't worry, submitting this form will not
+                    create a real booking.
+                  </div>
+                </div>
+              `
+            : ""}
+          <div class="${styles.calendarScreen}">
+            ${this.renderDateSlider()}
+            <div class="${styles.slotsContainer}" id="slotsContainer">
+              <h3 class="${styles.slotsHeader}">
+                Available Slots on
+                ${format(new Date(this.selectedDate), "EEEE, MMMM do, yyyy")}
+              </h3>
+              <!-- Include the slots template here -->
+              ${this.renderSlotsTemplate()}
+            </div>
+          </div>
+        </div>
+      `,
+      this.container
+    );
+
+    // Add the fadeIn class to the slotsContainer after rendering
+    const slotsContainer = this.container.querySelector(
+      `.${styles.slotsContainer}`
+    );
+    slotsContainer.classList.remove(styles.fadeIn);
+    // Use a setTimeout to ensure the class is added after the element is rendered
+    setTimeout(() => {
+      slotsContainer.classList.add(styles.fadeIn);
+    }, 100); // Longer delay before adding the class
+  }
+
+  renderSlotsTemplate() {
+    const selectedDate = format(
+      utcToZonedTime(new Date(this.selectedDate), this.currentTz),
+      "yyyy-MM-dd"
+    );
+
+    const selectedSlots = this.availabilities
+      .filter((availability) => {
+        const availabilityDate = format(
+          utcToZonedTime(new Date(availability.start), this.currentTz),
+          "yyyy-MM-dd"
+        );
+        return availabilityDate === selectedDate;
+      })
+      .map((availability) => {
+        const slotTime = format(
+          utcToZonedTime(new Date(availability.start), this.currentTz),
+          "h:mm a"
+        );
+        return {
+          slot: slotTime,
+          resource: availability.resource,
+          originalStartTime: availability.start,
+          originalEndTime: availability.end,
+          compoundKey: `${selectedDate}-${format(
+            utcToZonedTime(new Date(availability.start), this.currentTz),
+            "HH:mm"
+          )}-${availability.resource.id}`,
+        };
       });
+
+    this.slots = selectedSlots;
+
+    return html`
+      <ul class="${styles.slotsList}">
+        ${this.slots.map(
+          (slot, index) => html`
+            <li key=${index} class="${styles.slotItem} ${styles.fadeIn}">
+              <div class="${styles.slotResource}">
+                <div class="${styles.slotResourceInfo}">
+                  <img
+                    src="${slot.resource.pic}"
+                    class="${styles.slotResourcePic}"
+                    alt="Calendar Icon"
+                  />
+                  <div class="${styles.slotResourceDetails}">
+                    <p class="${styles.slotResourceName}">
+                      ${slot.resource.name}
+                    </p>
+                    <p class="${styles.slotResourceDescription}">
+                      ${slot.resource.description}
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  ${this.selectedSlot?.compoundKey !== slot.compoundKey
+                    ? html`
+                        <button
+                          class="${styles.slotButton} ${this.selectedSlot
+                            ?.compoundKey === slot.compoundKey
+                            ? styles.selected
+                            : ""}"
+                          @click=${() => this.selectSlot(slot)}
+                        >
+                          ${slot.slot}
+                        </button>
+                      `
+                    : html`
+                        <button
+                          class="${styles.nextButton}"
+                          @click=${this.next.bind(this)}
+                        >
+                          <span>${slot.slot}</span>
+                        </button>
+                      `}
+                </div>
+              </div>
+            </li>
+          `
+        )}
+      </ul>
+    `;
+  }
+
+  renderDateSlider() {
+    return html`
+      <div class="${styles.dateSliderContainer}">
+        <button
+          class="${styles.dateSliderButton}"
+          @click="${this.handlePreviousDate.bind(this)}"
+        >
+          &lt;
+        </button>
+        <span class="${styles.dateSliderDate}">
+          ${format(new Date(this.selectedDate), "EEEE, MMMM do, yyyy")}
+        </span>
+        <button
+          class="${styles.dateSliderButton}"
+          @click="${this.handleNextDate.bind(this)}"
+        >
+          &gt;
+        </button>
+      </div>
+    `;
+  }
+
+  handlePreviousDate() {
+    const previousDate = new Date(this.selectedDate);
+    previousDate.setDate(previousDate.getDate() - 1);
+    this.selectedDate = format(previousDate, "yyyy-MM-dd");
+
+    this.fetchAndSetAvailabilities().then(() => {
+      this.renderCalendar();
+    });
+  }
+
+  handleNextDate() {
+    const nextDate = new Date(this.selectedDate);
+    nextDate.setDate(nextDate.getDate() + 1);
+    this.selectedDate = format(nextDate, "yyyy-MM-dd");
+
+    this.fetchAndSetAvailabilities().then(() => {
+      this.renderCalendar();
+    });
+  }
+
+  selectSlot(slot) {
+    this.selectedSlot = slot;
+    this.renderCalendar(); // Re-render the calendar to reflect changes
+  }
+
+  next() {
+    this.showForm = true;
+    if (this.selectedSlot) {
+      const bookingDetails = this.getBookingDetails();
+      this.renderForm(bookingDetails);
+    } else {
+      console.error("No slot selected");
     }
+  }
+
+  getBookingDetails() {
+    if (!this.selectedSlot || !this.selectedDate) {
+      return null;
+    }
+    return {
+      date: format(new Date(this.selectedDate), "MMMM d, yyyy"),
+      time: this.selectedSlot.slot,
+      duration: "1 hour", // Assuming 1-hour duration, adjust if needed
+      resourceName: this.selectedSlot.resource.name,
+      resourcePic: this.selectedSlot.resource.pic,
+      resourceDescription: this.selectedSlot.resource.description,
+      serviceName: "Consultation", // Adjust this based on your actual service name
+    };
+  }
+
+  renderForm(bookingDetails) {
+    renderBookingForm(
+      this.container,
+      this.handleSubmit.bind(this),
+      this.formStatus,
+      bookingDetails,
+      this.demoMode
+    );
+
+    const formContainer = document.querySelector(
+      `.${styles.bookingFormContainer}`
+    );
+    formContainer.classList.remove(styles.fadeIn);
+    setTimeout(() => {
+      formContainer.classList.add(styles.fadeIn);
+    }, 50);
   }
 
   async handleSubmit(event) {
@@ -224,8 +413,8 @@ class BookingCalendarSDK {
 
     data = {
       ...data,
-      start: this.selectedSlot.originalStartTime, // Use original start time
-      end: this.selectedSlot.originalEndTime, // Use original end time
+      start: this.selectedSlot.originalStartTime,
+      end: this.selectedSlot.originalEndTime,
     };
 
     const resourceId = this.selectedSlot.resource.id;
@@ -237,7 +426,6 @@ class BookingCalendarSDK {
     }
 
     if (this.demoMode) {
-      // Simulate booking confirmation
       this.booking = {
         start: this.selectedSlot.originalStartTime,
         end: this.selectedSlot.originalEndTime,
@@ -259,7 +447,7 @@ class BookingCalendarSDK {
         data,
         this.apiUrl,
         resourceId,
-        this.demoMode // Pass demoMode flag
+        this.demoMode
       );
       this.formStatus = "success";
       this.renderBookingConfirmation();
@@ -279,7 +467,7 @@ class BookingCalendarSDK {
         this.container,
         this.booking,
         this.currentTz,
-        this.demoMode // Pass demoMode flag
+        this.demoMode
       );
     } else {
       console.error("Booking confirmation called without a valid booking");
@@ -295,154 +483,6 @@ class BookingCalendarSDK {
     );
   }
 
-  renderForm() {
-    const bookingDetails = this.getBookingDetails();
-    renderBookingForm(
-      this.container,
-      this.handleSubmit.bind(this),
-      this.formStatus,
-      bookingDetails,
-      this.demoMode // Pass demoMode flag
-    );
-
-    // Apply fade-in effect to the form
-    const formContainer = document.querySelector(
-      `.${styles.bookingFormContainer}`
-    );
-    formContainer.classList.remove(styles.fadeIn); // Reset animation
-    setTimeout(() => {
-      formContainer.classList.add(styles.fadeIn);
-    }, 50); // Delay to allow the DOM to update
-  }
-
-  getBookingDetails() {
-    if (!this.selectedSlot || !this.selectedDate) {
-      return null;
-    }
-    return {
-      date: format(new Date(this.selectedDate), "MMMM d, yyyy"),
-      time: this.selectedSlot.slot,
-      duration: "1 hour", // Assuming 1-hour duration, adjust if needed
-      resourceName: this.selectedSlot.resource.name,
-      resourcePic: this.selectedSlot.resource.pic,
-      resourceDescription: this.selectedSlot.resource.description,
-      serviceName: "Consultation", // Adjust this based on your actual service name
-    };
-  }
-
-  renderCalendar() {
-    renderCalendarLayout(
-      this.container,
-      this.selectedDate,
-      this.currentTz,
-      this.demoMode // Pass demoMode flag
-    );
-    initializeCalendar(
-      this.handleDateClick.bind(this),
-      this.availabilities,
-      this.selectedDate
-    );
-    this.renderTimezonePicker();
-  }
-
-  renderTimezonePicker() {
-    const timezonePickerContainer = document.getElementById("timezonePicker");
-    if (timezonePickerContainer) {
-      render(
-        html`
-          <select @change=${this.handleTimezoneChange.bind(this)}>
-            ${Intl.supportedValuesOf("timeZone").map(
-              (tz) => html`
-                <option value=${tz} ?selected=${tz === this.currentTz}>
-                  ${tz} (${format(utcToZonedTime(new Date(), tz), "h:mm a")})
-                </option>
-              `
-            )}
-          </select>
-        `,
-        timezonePickerContainer
-      );
-    }
-  }
-
-  handleTimezoneChange(event) {
-    this.currentTz = event.target.value;
-    this.renderSlots(true);
-    this.renderCalendar();
-  }
-
-  renderSlots(isDateChange = false) {
-    const selectedSlots = this.availabilities
-      .filter(
-        (availability) =>
-          format(
-            utcToZonedTime(new Date(availability.start), this.currentTz),
-            "yyyy-MM-dd"
-          ) === this.selectedDate
-      )
-      .map((availability) => ({
-        slot: format(
-          utcToZonedTime(new Date(availability.start), this.currentTz),
-          "h:mm a"
-        ),
-        resource: availability.resource,
-        originalStartTime: availability.start, // Store original start time
-        originalEndTime: availability.end, // Store original end time
-        compoundKey: `${this.selectedDate}-${format(
-          utcToZonedTime(new Date(availability.start), this.currentTz),
-          "HH:mm"
-        )}-${availability.resource.id}`,
-      }));
-
-    this.slots = selectedSlots;
-    const slotsContainer = document.getElementById("slotsContainer");
-    renderSlots(
-      slotsContainer,
-      this.slots,
-      this.selectedSlot,
-      this.selectSlot.bind(this),
-      this.next.bind(this)
-    );
-
-    // Only trigger fade-in effect if slots are being rendered due to a date change
-    if (isDateChange) {
-      setTimeout(() => {
-        const slotItems = slotsContainer.querySelectorAll(
-          `.${styles.slotItem}`
-        );
-        slotItems.forEach((item, index) => {
-          item.classList.remove(styles.fadeIn); // Reset animation
-          setTimeout(() => {
-            item.classList.add(styles.fadeIn);
-          }, index * 50); // Stagger the fade-in effect
-        });
-      }, 50); // Delay to allow the DOM to update
-    }
-  }
-
-  selectSlot(slot) {
-    this.selectedSlot = slot;
-    this.renderSlots(); // No animation triggered here
-  }
-
-  next() {
-    this.showForm = true;
-    if (this.selectedSlot) {
-      const bookingDetails = {
-        date: format(new Date(this.selectedDate), "MMMM d, yyyy"),
-        time: this.selectedSlot.slot,
-        duration: "1 hour", // Assuming 1-hour duration, adjust if needed
-        resourceName: this.selectedSlot.resource.name,
-        resourcePic: this.selectedSlot.resource.pic,
-        resourceDescription: this.selectedSlot.resource.description,
-        serviceName: "Consultation", // Adjust this based on your actual service name
-      };
-      this.renderForm(bookingDetails);
-    } else {
-      console.error("No slot selected");
-    }
-  }
-
   destroy() {
     if (this.container) {
       this.container.innerHTML = "";
@@ -450,108 +490,15 @@ class BookingCalendarSDK {
   }
 }
 
-const renderCalendarLayout = (
-  container,
-  selectedDate,
-  currentTz,
-  isDemoMode
-) => {
-  const formattedDate = selectedDate
-    ? format(new Date(selectedDate), "EEEE, MMMM do")
-    : "Select a Date";
-
-  render(
-    html`
-      <div class="${styles.calendarContainer}">
-        ${isDemoMode
-          ? html`
-              <div class="${styles.demoBadgeContainer}">
-                <div class="${styles.demoBadge}">
-                  Demo Mode – Don't worry, submitting this form will not create
-                  a real booking.
-                </div>
-              </div>
-            `
-          : ""}
-        <div class="${styles.twoColumnLayout} ${styles.calendarScreen}">
-          <div class="${styles.slotsContainer}" id="slotsContainer">
-            <h3 class="${styles.slotsHeader}">
-              Available Slots on ${formattedDate}
-            </h3>
-          </div>
-          <div class="${styles.calendarWrapper}">
-            <div class="${styles.calendar}" id="calendar"></div>
-            <div class="${styles.timezonePicker}" id="timezonePicker"></div>
-          </div>
-        </div>
-      </div>
-    `,
-    container
-  );
-};
-
-const initializeCalendar = (handleDateClick, availabilities, selectedDate) => {
-  const calendarEl = document.getElementById("calendar");
-  const calendar = new Calendar(calendarEl, {
-    plugins: [dayGridPlugin, interactionPlugin],
-    initialView: "dayGridMonth",
-    initialDate: selectedDate, // Set initial date to the selected date (today)
-    dateClick: handleDateClick,
-    events: generateUniqueEvents(availabilities),
-    validRange: { start: new Date() },
-    headerToolbar: {
-      start: "prev",
-      center: "title",
-      end: "next",
-    },
-    height: "auto",
-    dayHeaderFormat: { weekday: "narrow" },
-  });
-  calendar.render();
-
-  // Programmatically trigger a date click for today's date
-  const todayCell = calendarEl.querySelector(".fc-day-today");
-  if (todayCell) {
-    const clickEvent = new MouseEvent("click", {
-      view: window,
-      bubbles: true,
-      cancelable: true,
-    });
-    todayCell.dispatchEvent(clickEvent);
-  }
-};
-
-const generateUniqueEvents = (availabilities) => {
-  const uniqueEvents = availabilities.reduce((events, availability) => {
-    const dateStr = format(
-      zonedTimeToUtc(availability.start, "UTC"),
-      "yyyy-MM-dd"
-    );
-    if (!events[dateStr]) {
-      events[dateStr] = {
-        title: "Available",
-        start: availability.start,
-        allDay: true,
-      };
-    }
-    return events;
-  }, {});
-
-  return Object.values(uniqueEvents);
-};
-
-// Form-related functions
 const renderBookingConfirmation = (
   container,
   booking,
   currentTz,
-  isDemoMode // Accept demoMode flag
+  isDemoMode
 ) => {
-  // Parse the ISO string dates
   const startDate = new Date(booking.start);
   const endDate = new Date(booking.end);
 
-  // Convert to the selected timezone
   const localStartDate = utcToZonedTime(startDate, currentTz);
   const localEndDate = utcToZonedTime(endDate, currentTz);
 
@@ -651,7 +598,7 @@ const renderBookingForm = (
   handleSubmit,
   formStatus,
   bookingDetails,
-  isDemoMode // Accept demoMode flag
+  isDemoMode
 ) => {
   render(
     html`
@@ -741,59 +688,6 @@ const renderBookingForm = (
           </div>
         </div>
       </div>
-    `,
-    container
-  );
-};
-
-const renderSlots = (container, slots, selectedSlot, selectSlot, next) => {
-  render(
-    html`
-      <ul class="${styles.slotsList}">
-        ${slots.map(
-          (slot, index) => html`
-            <li key=${index} class="${styles.slotItem}">
-              <div class="${styles.slotResource}">
-                <div class="${styles.slotResourceInfo}">
-                  <img
-                    src="${slot.resource.pic}"
-                    class="${styles.slotResourcePic}"
-                    alt="Calendar Icon"
-                  />
-                  <div class="${styles.slotResourceDetails}">
-                    <p class="${styles.slotResourceName}">
-                      ${slot.resource.name}
-                    </p>
-                    <p class="${styles.slotResourceDescription}">
-                      ${slot.resource.description}
-                    </p>
-                  </div>
-                </div>
-                <div>
-                  ${selectedSlot?.compoundKey !== slot.compoundKey
-                    ? html`
-                        <button
-                          class="${styles.slotButton} ${selectedSlot?.compoundKey ===
-                          slot.compoundKey
-                            ? styles.selected
-                            : ""}"
-                          @click=${() => selectSlot(slot)}
-                        >
-                          ${slot.slot}
-                        </button>
-                      `
-                    : ""}
-                  ${selectedSlot?.compoundKey === slot.compoundKey
-                    ? html`<button class="${styles.nextButton}" @click=${next}>
-                        <span>${slot.slot}</span>
-                      </button>`
-                    : ""}
-                </div>
-              </div>
-            </li>
-          `
-        )}
-      </ul>
     `,
     container
   );

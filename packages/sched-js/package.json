@@ -3,10 +3,6 @@
   "version": "0.0.9",
   "description": "Sched JS library",
   "dependencies": {
-    "@fullcalendar/core": "^6.1.13",
-    "@fullcalendar/daygrid": "^6.1.6",
-    "@fullcalendar/interaction": "^6.1.6",
-    "@fullcalendar/react": "^6.1.6",
     "@heroicons/react": "^2.0.17",
     "@types/node": "18.15.11",
     "date-fns": "^2.29.3",
