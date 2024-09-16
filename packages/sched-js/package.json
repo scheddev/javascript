@@ -1,6 +1,6 @@
 {
   "name": "@scheddev/sched-js",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Sched JS library",
   "dependencies": {
     "@heroicons/react": "^2.0.17",

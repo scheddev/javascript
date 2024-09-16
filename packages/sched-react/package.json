@@ -1,13 +1,13 @@
 {
   "name": "@scheddev/sched-react",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "main": "dist/index.js",
   "files": [
     "dist"
   ],
   "description": "Sched React library",
   "dependencies": {
-    "@scheddev/sched-js": "0.0.9",
+    "@scheddev/sched-js": "0.0.10",
     "@types/react": "18.0.33",
     "@types/react-dom": "18.0.11",
     "react": "18.2.0",
