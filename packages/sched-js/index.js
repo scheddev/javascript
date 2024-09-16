@@ -304,6 +304,8 @@ class BookingCalendarSDK {
   }
 
   renderDateSlider() {
+    const dates = this.getDateRangeForSlider();
+
     return html`
       <div class="${styles.dateSliderContainer}">
         <button
@@ -322,7 +324,69 @@ class BookingCalendarSDK {
           &gt;
         </button>
       </div>
+      <div class="${styles.dateButtonsContainer}">
+        ${dates.map(
+          (date) => html`
+            <button
+              class="${styles.dateButton} ${this.isSameDate(
+                date,
+                new Date(this.selectedDate)
+              )
+                ? styles.selectedDateButton
+                : ""}"
+              @click="${() => this.selectDate(date)}"
+            >
+              ${format(date, "d")}
+            </button>
+          `
+        )}
+      </div>
     `;
+  }
+
+  getDateRangeForSlider() {
+    const dates = [];
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    let selectedDate = new Date(this.selectedDate);
+    selectedDate.setHours(0, 0, 0, 0);
+
+    // Minimum date is today minus 2 days
+    const minDate = new Date(today);
+    minDate.setDate(minDate.getDate() - 2);
+
+    // Compute startDate as the maximum of (selectedDate - 2 days) and minDate
+    let startDate = new Date(selectedDate);
+    startDate.setDate(startDate.getDate() - 2);
+    if (startDate < minDate) {
+      startDate = minDate;
+    }
+
+    // Generate 5 dates starting from startDate
+    for (let i = 0; i < 5; i++) {
+      const date = new Date(startDate);
+      date.setDate(startDate.getDate() + i);
+      dates.push(date);
+    }
+
+    return dates;
+  }
+
+  isSameDate(date1, date2) {
+    return (
+      date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate()
+    );
+  }
+
+  selectDate(date) {
+    this.selectedDate = format(date, "yyyy-MM-dd");
+    this.fetchAndSetAvailabilities().then(() => {
+      this.renderCalendar();
+    });
   }
 
   handlePreviousDate() {
