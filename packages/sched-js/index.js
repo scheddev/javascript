@@ -473,13 +473,12 @@ const renderCalendarLayout = (
               </div>
             `
           : ""}
-        <div class="${styles.twoColumnLayout}">
+        <div class="${styles.twoColumnLayout} ${styles.calendarScreen}">
           <div class="${styles.slotsContainer}" id="slotsContainer">
             <h3 class="${styles.slotsHeader}">
               Available Slots on ${formattedDate}
             </h3>
           </div>
-          <!-- Add a wrapper for the calendar -->
           <div class="${styles.calendarWrapper}">
             <div class="${styles.calendar}" id="calendar"></div>
             <div class="${styles.timezonePicker}" id="timezonePicker"></div>

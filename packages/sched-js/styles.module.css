@@ -630,6 +630,10 @@
     flex-direction: column;
   }
 
+  .twoColumnLayout.calendarScreen {
+    flex-direction: column-reverse !important;
+  }
+
   .slotsContainer,
   .calendarWrapper {
     width: 100%;
