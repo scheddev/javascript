@@ -203,16 +203,6 @@ class BookingCalendarSDK {
       `,
       this.container
     );
-
-    // Add the fadeIn class to the slotsContainer after rendering
-    const slotsContainer = this.container.querySelector(
-      `.${styles.slotsContainer}`
-    );
-    slotsContainer.classList.remove(styles.fadeIn);
-    // Use a setTimeout to ensure the class is added after the element is rendered
-    setTimeout(() => {
-      slotsContainer.classList.add(styles.fadeIn);
-    }, 100); // Longer delay before adding the class
   }
 
   renderSlotsTemplate() {
@@ -252,7 +242,7 @@ class BookingCalendarSDK {
       <ul class="${styles.slotsList}">
         ${this.slots.map(
           (slot, index) => html`
-            <li key=${index} class="${styles.slotItem} ${styles.fadeIn}">
+            <li key=${index} class="${styles.slotItem}">
               <div class="${styles.slotResource}">
                 <div class="${styles.slotResourceInfo}">
                   <img
@@ -455,14 +445,6 @@ class BookingCalendarSDK {
       bookingDetails,
       this.demoMode
     );
-
-    const formContainer = document.querySelector(
-      `.${styles.bookingFormContainer}`
-    );
-    formContainer.classList.remove(styles.fadeIn);
-    setTimeout(() => {
-      formContainer.classList.add(styles.fadeIn);
-    }, 50);
   }
 
   async handleSubmit(event) {
@@ -576,10 +558,7 @@ const renderBookingConfirmation = (
 
   render(
     html`
-      <div
-        class="${styles.bookingFormContainer} ${styles.fadeIn}"
-        style="text-align: center;"
-      >
+      <div class="${styles.bookingFormContainer}" style="text-align: center;">
         ${isDemoMode
           ? html`
               <div class="${styles.demoBadgeContainer}">

@@ -340,9 +340,6 @@
 
 .slotItem {
   width: 100%;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
 }
 
 .slotItem.fadeIn {
@@ -472,23 +469,6 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-}
-
-.fadeIn {
-  animation: fadeInUp 0.5s ease-out forwards; /* Increased duration from 0.3s to 0.5s */
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(
-      30px
-    ); /* Increased the initial translateY value for a softer rise */
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .timezonePicker {
