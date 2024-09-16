@@ -303,40 +303,51 @@ class BookingCalendarSDK {
     const dates = this.getDateRangeForSlider();
 
     return html`
-      <div class="${styles.dateSliderContainer}">
-        <button
-          class="${styles.dateSliderButton}"
-          @click="${this.handlePreviousDate.bind(this)}"
-        >
-          &lt;
-        </button>
-        <span class="${styles.dateSliderDate}">
+      <div class="${styles.dateSliderWrapper}">
+        <!-- Selected Date Display -->
+        <div class="${styles.selectedDateDisplay}">
           ${format(new Date(this.selectedDate), "EEEE, MMMM do, yyyy")}
-        </span>
-        <button
-          class="${styles.dateSliderButton}"
-          @click="${this.handleNextDate.bind(this)}"
-        >
-          &gt;
-        </button>
-      </div>
-      <div class="${styles.dateButtonsContainer}">
-        ${dates.map(
-          (date) => html`
-            <button
-              class="${styles.dateButton} ${this.isSameDate(
-                date,
-                new Date(this.selectedDate)
-              )
-                ? styles.selectedDateButton
-                : ""}"
-              @click="${() => this.selectDate(date)}"
-            >
-              <div class="${styles.dateButtonDay}">${format(date, "E")}</div>
-              <div class="${styles.dateButtonDate}">${format(date, "d")}</div>
-            </button>
-          `
-        )}
+        </div>
+        <!-- Date Buttons with Arrows -->
+        <div class="${styles.dateButtonsWithArrows}">
+          <button
+            class="${styles.dateSliderButton}"
+            @click="${this.handlePreviousDate.bind(this)}"
+            aria-label="Previous Dates"
+          >
+            &lt;
+          </button>
+          <div class="${styles.dateButtonsContainer}">
+            ${dates.map(
+              (date) => html`
+                <button
+                  class="${styles.dateButton} ${this.isSameDate(
+                    date,
+                    new Date(this.selectedDate)
+                  )
+                    ? styles.selectedDateButton
+                    : ""}"
+                  @click="${() => this.selectDate(date)}"
+                  aria-label="${format(date, "MMMM d, yyyy")}"
+                >
+                  <div class="${styles.dateButtonDay}">
+                    ${format(date, "E")}
+                  </div>
+                  <div class="${styles.dateButtonDate}">
+                    ${format(date, "d")}
+                  </div>
+                </button>
+              `
+            )}
+          </div>
+          <button
+            class="${styles.dateSliderButton}"
+            @click="${this.handleNextDate.bind(this)}"
+            aria-label="Next Dates"
+          >
+            &gt;
+          </button>
+        </div>
       </div>
     `;
   }

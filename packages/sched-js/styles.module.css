@@ -647,33 +647,71 @@
   box-sizing: border-box;
 }
 
-.dateButtonsContainer {
+/* Date Slider Wrapper */
+.dateSliderWrapper {
   display: flex;
-  justify-content: center;
-  margin-top: 10px;
+  flex-direction: column;
+  align-items: center; /* Centers items horizontally */
+  gap: 8px; /* Space between selected date and date buttons */
+  margin: 20px 0; /* Adjust vertical spacing as needed */
 }
 
-/* Styles for the date buttons inside the dateButtonsContainer */
-.dateButton {
-  width: 60px; /* Increased width for better spacing */
-  height: 60px; /* Increased height for better spacing */
-  border-radius: 100%; /* Adjusted border-radius to keep it circular */
-  margin: 0 5px;
-  padding: 10px; /* Added padding */
+/* Selected Date Display */
+.selectedDateDisplay {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Date Buttons with Arrows */
+.dateButtonsWithArrows {
+  display: flex;
+  align-items: center; /* Vertically centers the items */
+  gap: 16px; /* Adjust the space between items as needed */
+}
+
+/* Date Slider Buttons */
+.dateSliderButton {
+  background: none;
   border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+  padding: 8px;
+  transition: color 0.2s ease;
+}
+
+.dateSliderButton:hover {
+  color: #00a3ff;
+}
+
+/* Date Buttons Container */
+.dateButtonsContainer {
+  display: flex;
+  gap: 8px; /* Space between date buttons */
+}
+
+/* Date Buttons */
+.dateButton {
   background-color: #f0f0f0;
-  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  padding: 8px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* Center content vertically */
+  transition: background-color 0.2s ease;
+  width: 50px;
+}
+
+.dateButton:hover {
+  background-color: #e0e0e0;
 }
 
 .dateButtonDay {
   font-size: 12px;
   color: #555;
-  margin-bottom: 2px; /* Added space between day and date */
 }
 
 .dateButtonDate {
@@ -682,11 +720,12 @@
   color: #000;
 }
 
+/* Selected Date Button */
 .selectedDateButton {
   background-color: #00a3ff;
 }
 
-.selectedDateButton .dateButtonDate,
-.selectedDateButton .dateButtonDay {
+.selectedDateButton .dateButtonDay,
+.selectedDateButton .dateButtonDate {
   color: #fff;
 }
