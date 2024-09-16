@@ -259,9 +259,11 @@
 }
 
 .formTitle {
-  font-size: 1.25rem;
   margin-bottom: 1rem;
-  color: #000000;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
 }
 
 .bookingForm {
@@ -315,7 +317,7 @@
   background-color: #00a3ff;
   color: #ffffff;
   border: none;
-  border-radius: 8px;
+  border-radius: 2rem;
   cursor: pointer;
 }
 
