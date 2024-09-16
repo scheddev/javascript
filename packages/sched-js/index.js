@@ -674,79 +674,80 @@ const renderBookingForm = (
               </div>
             `
           : ""}
-        <div class="${styles.twoColumnLayout}">
-          <div class="${styles.bookingForm}">
-            <h3 class="${styles.formTitle}">Enter Details</h3>
-            <form id="bookingForm" @submit=${handleSubmit}>
-              <fieldset class="${styles.formFieldset}">
-                <div class="${styles.formRow}">
-                  <div class="${styles.formGroup}">
-                    <label for="firstName" class="${styles.formLabel}">
-                      <span class="${styles.labelText}">First Name *</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="firstName"
-                      name="firstName"
-                      class="${styles.formInput}"
-                      required
-                    />
-                  </div>
-                  <div class="${styles.formGroup}">
-                    <label for="lastName" class="${styles.formLabel}">
-                      <span class="${styles.labelText}">Last Name *</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="lastName"
-                      name="lastName"
-                      class="${styles.formInput}"
-                      required
-                    />
-                  </div>
-                </div>
+        <!-- Move the booking summary above the form -->
+        <div class="${styles.bookingSummary}">
+          <div class="${styles.summaryHeader}">
+            <img
+              src="${bookingDetails.resourcePic}"
+              class="${styles.summaryPic}"
+              alt="Resource Icon"
+            />
+            <div class="${styles.summaryDetails}">
+              <p class="${styles.summaryResource}">
+                ${bookingDetails.resourceName}
+              </p>
+              <p class="${styles.summaryDescription}">
+                <strong>${bookingDetails.time}</strong> on
+                <strong>${bookingDetails.date}</strong> for
+                <strong>${bookingDetails.duration}</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Update the form container -->
+        <div class="${styles.bookingForm}">
+          <h3 class="${styles.formTitle}">Enter Details</h3>
+          <form id="bookingForm" @submit=${handleSubmit}>
+            <fieldset class="${styles.formFieldset}">
+              <div class="${styles.formRow}">
                 <div class="${styles.formGroup}">
-                  <label for="email" class="${styles.formLabel}">
-                    <span class="${styles.labelText}">Email *</span>
+                  <label for="firstName" class="${styles.formLabel}">
+                    <span class="${styles.labelText}">First Name *</span>
                   </label>
                   <input
-                    type="email"
-                    id="email"
-                    name="email"
+                    type="text"
+                    id="firstName"
+                    name="firstName"
                     class="${styles.formInput}"
                     required
                   />
                 </div>
-              </fieldset>
-              <button type="submit" class="${styles.submitButton}">
-                Schedule Event
-              </button>
-              ${formStatus === "error"
-                ? html`<div class="${styles.errorMessage}">
-                    There was an error in booking. Please try again later.
-                  </div>`
-                : ""}
-            </form>
-          </div>
-          <div class="${styles.bookingSummary}">
-            <div class="${styles.summaryHeader}">
-              <img
-                src="${bookingDetails.resourcePic}"
-                class="${styles.summaryPic}"
-                alt="Resource Icon"
-              />
-              <div class="${styles.summaryDetails}">
-                <p class="${styles.summaryResource}">
-                  ${bookingDetails.resourceName}
-                </p>
-                <p class="${styles.summaryDescription}">
-                  <strong>${bookingDetails.time}</strong> on
-                  <strong>${bookingDetails.date}</strong> for
-                  <strong>${bookingDetails.duration}</strong>
-                </p>
+                <div class="${styles.formGroup}">
+                  <label for="lastName" class="${styles.formLabel}">
+                    <span class="${styles.labelText}">Last Name *</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    class="${styles.formInput}"
+                    required
+                  />
+                </div>
               </div>
-            </div>
-          </div>
+              <div class="${styles.formGroup}">
+                <label for="email" class="${styles.formLabel}">
+                  <span class="${styles.labelText}">Email *</span>
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  class="${styles.formInput}"
+                  required
+                />
+              </div>
+            </fieldset>
+            <button type="submit" class="${styles.submitButton}">
+              Schedule Event
+            </button>
+            ${formStatus === "error"
+              ? html`<div class="${styles.errorMessage}">
+                  There was an error in booking. Please try again later.
+                </div>`
+              : ""}
+          </form>
         </div>
       </div>
     `,
