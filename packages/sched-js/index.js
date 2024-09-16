@@ -751,7 +751,7 @@ const renderBookingForm = (
               </div>
             </fieldset>
             <button type="submit" class="${styles.submitButton}">
-              Schedule Event
+              Confirm Booking
             </button>
             ${formStatus === "error"
               ? html`<div class="${styles.errorMessage}">
