@@ -510,11 +510,52 @@
   display: flex;
   flex-direction: column;
   min-height: 100%; /* Ensure it takes at least the full height */
+  overflow-x: hidden; /* Prevent horizontal overflow */
 }
 
 /* Adjust the twoColumnLayout to grow */
 .twoColumnLayout {
   flex: 1; /* Allow it to grow and take up available space */
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap; /* Adjust the flex-wrap property to wrap on smaller screens */
+}
+
+.slotsContainer {
+  flex: 1;
+  min-width: 300px; /* Ensure the slots container doesn't exceed the viewport width */
+}
+
+/* Add media query for screens smaller than 768px */
+@media (max-width: 768px) {
+  .twoColumnLayout {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .slotsContainer,
+  .calendar {
+    width: 100%;
+  }
+
+  .slotButton,
+  .nextButton {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .calendar {
+    overflow-x: auto;
+  }
+}
+
+/* Adjust the slot buttons to prevent overlapping */
+.slotButton,
+.nextButton {
+  max-width: 100%; /* Make buttons responsive */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Demo Badge Container */
