@@ -195,10 +195,6 @@ class BookingCalendarSDK {
           <div class="${styles.calendarScreen}">
             ${this.renderDateSlider()}
             <div class="${styles.slotsContainer}" id="slotsContainer">
-              <h3 class="${styles.slotsHeader}">
-                Available Slots on
-                ${format(new Date(this.selectedDate), "EEEE, MMMM do, yyyy")}
-              </h3>
               <!-- Include the slots template here -->
               ${this.renderSlotsTemplate()}
             </div>
@@ -336,7 +332,8 @@ class BookingCalendarSDK {
                 : ""}"
               @click="${() => this.selectDate(date)}"
             >
-              ${format(date, "d")}
+              <div class="${styles.dateButtonDay}">${format(date, "E")}</div>
+              <div class="${styles.dateButtonDate}">${format(date, "d")}</div>
             </button>
           `
         )}
