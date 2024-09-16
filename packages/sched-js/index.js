@@ -479,7 +479,8 @@ const renderCalendarLayout = (
               Available Slots on ${formattedDate}
             </h3>
           </div>
-          <div>
+          <!-- Add a wrapper for the calendar -->
+          <div class="${styles.calendarWrapper}">
             <div class="${styles.calendar}" id="calendar"></div>
             <div class="${styles.timezonePicker}" id="timezonePicker"></div>
           </div>

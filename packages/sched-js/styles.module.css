@@ -588,3 +588,57 @@
   color: #a1a1aa; /* zinc-400 */
   margin: 0;
 }
+
+/* Container for the calendar and slots */
+.calendarContainer {
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Layout for the two columns */
+.twoColumnLayout {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+/* Slots container */
+.slotsContainer {
+  flex: 1;
+  min-width: 300px;
+}
+
+/* Calendar wrapper */
+.calendarWrapper {
+  flex: 1;
+  min-width: 300px;
+}
+
+/* Calendar styles */
+.calendar {
+  width: 100%;
+}
+
+/* Timezone picker styles */
+.timezonePicker {
+  margin-top: 10px;
+}
+
+/* Responsive adjustments for screens less than 768px wide */
+@media (max-width: 768px) {
+  .twoColumnLayout {
+    flex-direction: column;
+  }
+
+  .slotsContainer,
+  .calendarWrapper {
+    width: 100%;
+    min-width: unset;
+  }
+}
+
+/* Ensure the FullCalendar adapts to the container width */
+.calendar .fc {
+  max-width: 100%;
+  box-sizing: border-box;
+}
