@@ -4,6 +4,7 @@ import { html, render } from "lit-html";
 import styles from "./styles.module.css";
 import { bookAppointment, fetchAvailabilities } from "./api";
 import { updateValidDays } from "./utils";
+import { repeat } from "lit-html/directives/repeat.js";
 
 class BookingCalendarSDK {
   constructor() {
@@ -242,10 +243,11 @@ class BookingCalendarSDK {
 
     return html`
       <ul class="${styles.slotsList}">
-        ${this.slots.map(
+        ${repeat(
+          this.slots,
+          (slot) => slot.compoundKey, // Key function
           (slot, index) => html`
             <li
-              key=${index}
               class="${styles.slotItem} ${styles.fadeInUp}"
               style="animation-delay: ${index * 0.1}s"
             >
