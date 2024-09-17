@@ -183,6 +183,15 @@ class BookingCalendarSDK {
     render(
       html`
         <div class="${styles.calendarContainer} ${styles.fadeIn}">
+          <div class="${styles.calendarScreen}">
+            ${this.renderDateSlider()}
+            <div
+              class="${styles.slotsContainer} ${styles.fadeIn}"
+              id="slotsContainer"
+            >
+              ${this.renderSlotsTemplate()}
+            </div>
+          </div>
           ${this.demoMode
             ? html`
                 <div class="${styles.demoBadgeContainer} ${styles.slideDown}">
@@ -193,15 +202,6 @@ class BookingCalendarSDK {
                 </div>
               `
             : ""}
-          <div class="${styles.calendarScreen}">
-            ${this.renderDateSlider()}
-            <div
-              class="${styles.slotsContainer} ${styles.fadeIn}"
-              id="slotsContainer"
-            >
-              ${this.renderSlotsTemplate()}
-            </div>
-          </div>
         </div>
       `,
       this.container
@@ -570,16 +570,6 @@ const renderBookingConfirmation = (
         class="${styles.bookingFormContainer} ${styles.fadeIn}"
         style="text-align: center;"
       >
-        ${isDemoMode
-          ? html`
-              <div class="${styles.demoBadgeContainer}">
-                <div class="${styles.demoBadge}">
-                  Demo Mode – Don't worry, submitting this form will not create
-                  a real booking.
-                </div>
-              </div>
-            `
-          : ""}
         <div
           class="${styles.confirmationHeader} ${styles.scaleIn}"
           style="display: flex; align-items: center; justify-content: center;"
@@ -649,6 +639,16 @@ const renderBookingConfirmation = (
             A confirmation has been sent to your email address.
           </p>
         </div>
+        ${isDemoMode
+          ? html`
+              <div class="${styles.demoBadgeContainer}">
+                <div class="${styles.demoBadge}">
+                  Demo Mode – Don't worry, submitting this form will not create
+                  a real booking.
+                </div>
+              </div>
+            `
+          : ""}
       </div>
     `,
     container
@@ -665,16 +665,6 @@ const renderBookingForm = (
   render(
     html`
       <div class="${styles.bookingFormContainer} ${styles.fadeIn}">
-        ${isDemoMode
-          ? html`
-              <div class="${styles.demoBadgeContainer}">
-                <div class="${styles.demoBadge}">
-                  Demo Mode – Don't worry, submitting this form will not create
-                  a real booking.
-                </div>
-              </div>
-            `
-          : ""}
         <!-- Move the booking summary above the form -->
         <div class="${styles.bookingSummary} ${styles.slideInRight}">
           <div class="${styles.summaryHeader}">
@@ -750,6 +740,16 @@ const renderBookingForm = (
               : ""}
           </form>
         </div>
+        ${isDemoMode
+          ? html`
+              <div class="${styles.demoBadgeContainer}">
+                <div class="${styles.demoBadge}">
+                  Demo Mode – Don't worry, submitting this form will not create
+                  a real booking.
+                </div>
+              </div>
+            `
+          : ""}
       </div>
     `,
     container
