@@ -256,6 +256,7 @@
   max-width: 64rem;
   margin-left: auto;
   margin-right: auto;
+  overflow: hidden;
 }
 
 .formTitle {
@@ -734,12 +735,34 @@
   animation: slideDown 0.5s ease-out;
 }
 
-.slideInRight {
-  animation: slideInRight 0.5s ease-out;
+@keyframes smoothSlideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes smoothSlideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .slideInLeft {
-  animation: slideInLeft 0.5s ease-out;
+  animation: smoothSlideInLeft 0.5s ease-out forwards;
+}
+
+.slideInRight {
+  animation: smoothSlideInRight 0.5s ease-out forwards;
 }
 
 .scaleIn {
@@ -772,24 +795,6 @@
   }
   to {
     transform: translateY(0);
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideInLeft {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
   }
 }
 
